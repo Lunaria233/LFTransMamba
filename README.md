@@ -61,13 +61,49 @@ python Generate_Data_for_inference.py --angRes 5 --scale_factor 4
 
 ```bash
 # Track1 - Classic
-python lfsr.py --name Track1.LFTransMamba_D16_R1_K18_C80_T2.VAL --model LFTransMamba_D16_R1_K18_C80_T2 --device cuda:0 --task val_all --scale 4 --patch-size 32 --stride 8 --processor sad --angular 5 --model-source vanilla --model-path checkpoints/track1.classic.pth --tta
+python lfsr.py \
+  --name Track1.LFTransMamba_D16_R1_K18_C80_T2.VAL \
+  --model LFTransMamba_D16_R1_K18_C80_T2 \
+  --device cuda:0 \
+  --task val_all \
+  --scale 4 \
+  --patch-size 32 \
+  --stride 8 \
+  --processor sad \
+  --angular 5 \
+  --model-source vanilla \
+  --model-path checkpoints/track1.classic.pth \
+  --tta
 
 # Track2 - Efficiency
-python lfsr.py --name Track2.LFTransMamba_D16_R1_K6_C32_T0.VAL --model LFTransMamba_D16_R1_K6_C32_T0 --device cuda:0 --task val_all --scale 4 --patch-size 32 --stride 8 --processor sad --angular 5 --model-source vanilla --model-path checkpoints/track2.efficiency.pth
+python lfsr.py \
+  --name Track2.LFTransMamba_D16_R1_K6_C32_T0.VAL \
+  --model LFTransMamba_D16_R1_K6_C32_T0 \
+  --device cuda:0 \
+  --task val_all \
+  --scale 4 \
+  --patch-size 32 \
+  --stride 8 \
+  --processor sad \
+  --angular 5 \
+  --model-source vanilla \
+  --model-path checkpoints/track2.efficiency.pth
 
 # Track3 - Large Model
-python lfsr.py --name Track3.LFTransMamba_D16_R1_K24_C80_T2.B3.FP16.VAL --model LFTransMamba_D16_R1_K24_C80_T2 --device cuda:0 --task val_all --scale 4 --patch-size 32 --stride 8 --processor sad --angular 5 --model-source vanilla --model-path checkpoints/track3.llm.pth --fp16 --tta
+python lfsr.py \
+  --name Track3.LFTransMamba_D16_R1_K24_C80_T2.B3.FP16.VAL \
+  --model LFTransMamba_D16_R1_K24_C80_T2 \
+  --device cuda:0 \
+  --task val_all \
+  --scale 4 \
+  --patch-size 32 \
+  --stride 8 \
+  --processor sad \
+  --angular 5 \
+  --model-source vanilla \
+  --model-path checkpoints/track3.llm.pth \
+  --fp16 \
+  --tta
 
 ```
 
@@ -75,39 +111,172 @@ python lfsr.py --name Track3.LFTransMamba_D16_R1_K24_C80_T2.B3.FP16.VAL --model 
 
 ```bash
 # Track1 - Classic
-python lfsr.py --name  Track1.LFTransMamba_D16_R1_K18_C80_T2.VAL.NTIRE --model LFTransMamba_D16_R1_K18_C80_T2 --device cuda:0 --task test --dataset LFSR.NTIRE.VAL --scale 4 --patch-size 32 --stride 8 --processor sad --angular 5 --model-source vanilla --model-path checkpoints/track1.classic.pth --tta
+python lfsr.py \
+  --name  Track1.LFTransMamba_D16_R1_K18_C80_T2.VAL.NTIRE \
+  --model LFTransMamba_D16_R1_K18_C80_T2 \
+  --device cuda:0 \
+  --task test \
+  --dataset LFSR.NTIRE.VAL \
+  --scale 4 \
+  --patch-size 32 \
+  --stride 8 \
+  --processor sad \
+  --angular 5 \
+  --model-source vanilla \
+  --model-path checkpoints/track1.classic.pth \
+  --tta
 
 # Track2 - Efficiency
-python lfsr.py --name Track2.LFTransMamba_D16_R1_K6_C32_T0.VAL.NTIRE --model LFTransMamba_D16_R1_K6_C32_T0 --device cuda:0 --task test --dataset LFSR.NTIRE.VAL --scale 4 --patch-size 32 --stride 8 --processor sad --angular 5 --model-source vanilla --model-path checkpoints/track2.efficiency.pth
+python lfsr.py \
+  --name Track2.LFTransMamba_D16_R1_K6_C32_T0.VAL.NTIRE \
+  --model LFTransMamba_D16_R1_K6_C32_T0 \
+  --device cuda:0 \
+  --task test \
+  --dataset LFSR.NTIRE.VAL \
+  --scale 4 \
+  --patch-size 32 \
+  --stride 8 \
+  --processor sad \
+  --angular 5 \
+  --model-source vanilla \
+  --model-path checkpoints/track2.efficiency.pth
 
 # Track3 - Large Model
-python lfsr.py --name  Track3.LFTransMamba_D16_R1_K24_C80_T2.B3.FP16.VAL.NTIRE --model LFTransMamba_D16_R1_K24_C80_T2 --device cuda:0 --task test --dataset LFSR.NTIRE.VAL --scale 4 --patch-size 32 --stride 8 --processor sad --angular 5 --model-source vanilla --model-path checkpoints/track3.llm.pth --fp16 --tta
+python lfsr.py \
+  --name  Track3.LFTransMamba_D16_R1_K24_C80_T2.B3.FP16.VAL.NTIRE \
+  --model LFTransMamba_D16_R1_K24_C80_T2 \
+  --device cuda:0 \
+  --task test \
+  --dataset LFSR.NTIRE.VAL \
+  --scale 4 \
+  --patch-size 32 \
+  --stride 8 \
+  --processor sad \
+  --angular 5 \
+  --model-source vanilla \
+  --model-path checkpoints/track3.llm.pth \
+  --fp16 \
+  --tta
 ```
 
 #### For NTIRE-25 Test
 
 ```bash
 # Track1 - Classic
-python lfsr.py --name  Track1.LFTransMamba_D16_R1_K18_C80_T2.TEST.NTIRE --model LFTransMamba_D16_R1_K18_C80_T2 --device cuda:0 --task test --dataset LFSR.NTIRE.TEST --scale 4 --patch-size 32 --stride 8 --processor sad --angular 5 --model-source vanilla --model-path checkpoints/track1.classic.pth --tta
+python lfsr.py \
+  --name  Track1.LFTransMamba_D16_R1_K18_C80_T2.TEST.NTIRE \
+  --model LFTransMamba_D16_R1_K18_C80_T2 \
+  --device cuda:0 \
+  --task test \
+  --dataset LFSR.NTIRE.TEST \
+  --scale 4 \
+  --patch-size 32 \
+  --stride 8 \
+  --processor sad \
+  --angular 5 \
+  --model-source vanilla \
+  --model-path checkpoints/track1.classic.pth \
+  --tta
 
 # Track2 - Efficiency
-python lfsr.py --name Track2.LFTransMamba_D16_R1_K6_C32_T0.TEST.NTIRE --model LFTransMamba_D16_R1_K6_C32_T0 --device cuda:0 --task test --dataset LFSR.NTIRE.TEST --scale 4 --patch-size 32 --stride 8 --processor sad --angular 5 --model-source vanilla --model-path checkpoints/track2.efficiency.pth
+python lfsr.py \
+  --name Track2.LFTransMamba_D16_R1_K6_C32_T0.TEST.NTIRE \
+  --model LFTransMamba_D16_R1_K6_C32_T0 \
+  --device cuda:0 \
+  --task test \
+  --dataset LFSR.NTIRE.TEST \
+  --scale 4 \
+  --patch-size 32 \
+  --stride 8 \
+  --processor sad \
+  --angular 5 \
+  --model-source vanilla \
+  --model-path checkpoints/track2.efficiency.pth
 
 # Track3 - Large Model
-python lfsr.py --name  Track3.LFTransMamba_D16_R1_K24_C80_T2.B3.FP16.TEST.NTIRE --model LFTransMamba_D16_R1_K24_C80_T2 --device cuda:0 --task test --dataset LFSR.NTIRE.TEST --scale 4 --patch-size 32 --stride 8 --processor sad --angular 5 --model-source vanilla --model-path checkpoints/track3.llm.pth --fp16 --tta
+python lfsr.py \
+  --name  Track3.LFTransMamba_D16_R1_K24_C80_T2.B3.FP16.TEST.NTIRE \
+  --model LFTransMamba_D16_R1_K24_C80_T2 \
+  --device cuda:0 \
+  --task test \
+  --dataset LFSR.NTIRE.TEST \
+  --scale 4 \
+  --patch-size 32 \
+  --stride 8 \
+  --processor sad \
+  --angular 5 \
+  --model-source vanilla \
+  --model-path checkpoints/track3.llm.pth \
+  --fp16 \
+  --tta
 ```
 
 ### 4. Training
 
 ```bash
 # Track1 - Classic
-CUDA_VISIBLE_DEVICES=1,2,3 python lfsr.py --name Track1.LFTransMamba_D16_R1_K18_C80_T2 --model LFTransMamba_D16_R1_K18_C80_T2 --device cuda:0 --task train --scale 4 --patch-size 32 --stride 8 --processor psw --angular 5 --dataset LFSR.ALL4 --log 10 --log-val 1 --log-save 1 --train-lr-scheduler 2 --train-batchsize 3 --train-epoch 30 --train-lr 3e-4 --ema 0.999
+CUDA_VISIBLE_DEVICES=1,2,3 python lfsr.py \
+  --name Track1.LFTransMamba_D16_R1_K18_C80_T2 \
+  --model LFTransMamba_D16_R1_K18_C80_T2 \
+  --device cuda:0 \
+  --task train \
+  --scale 4 \
+  --patch-size 32 \
+  --stride 8 \
+  --processor psw \
+  --angular 5 \
+  --dataset LFSR.ALL4 \
+  --log 10 \
+  --log-val 1 \
+  --log-save 1 \
+  --train-lr-scheduler 2 \
+  --train-batchsize 3 \
+  --train-epoch 30 \
+  --train-lr 3e-4 \
+  --ema 0.999
 
 # Track2 - Efficiency
-CUDA_VISIBLE_DEVICES=1,2,3 python lfsr.py --name Track2.LFTransMamba_D16_R1_K6_C32_T0 --model LFTransMamba_D16_R1_K6_C32_T0 --device cuda:0 --task train --scale 4 --patch-size 32 --stride 12 --processor psw --angular 5 --dataset LFSR.ALL4 --log 10 --log-val -1 --log-save 1 --train-lr-scheduler 3 --train-batchsize 3 --train-epoch 100 --train-lr 2e-4 --ema 0.999
+CUDA_VISIBLE_DEVICES=1,2,3 python lfsr.py \
+  --name Track2.LFTransMamba_D16_R1_K6_C32_T0 \
+  --model LFTransMamba_D16_R1_K6_C32_T0 \
+  --device cuda:0 \
+  --task train \
+  --scale 4 \
+  --patch-size 32 \
+  --stride 12 \
+  --processor psw \
+  --angular 5 \
+  --dataset LFSR.ALL4 \
+  --log 10 \
+  --log-val -1 \
+  --log-save 1 \
+  --train-lr-scheduler 3 \
+  --train-batchsize 3 \
+  --train-epoch 100 \
+  --train-lr 2e-4 \
+  --ema 0.999
 
 # Track3 - Large Model
-CUDA_VISIBLE_DEVICES=1,2,3 python lfsr.py --name Track3.LFTransMamba_D16_R1_K24_C80_T2 --model LFTransMamba_D16_R1_K24_C80_T2 --device cuda:0 --task train --scale 4 --patch-size 32 --stride 8 --processor psw --angular 5 --dataset LFSR.ALL4.EXTRA --log 10 --log-val -1 --log-save 1 --train-lr-scheduler 2 --train-batchsize 3 --train-epoch 30 --train-lr 3e-4 --ema 0.999 --fp16
+CUDA_VISIBLE_DEVICES=1,2,3 python lfsr.py \
+  --name Track3.LFTransMamba_D16_R1_K24_C80_T2 \
+  --model LFTransMamba_D16_R1_K24_C80_T2 \
+  --device cuda:0 \
+  --task train \
+  --scale 4 \
+  --patch-size 32 \
+  --stride 8 \
+  --processor psw \
+  --angular 5 \
+  --dataset LFSR.ALL4.EXTRA \
+  --log 10 \
+  --log-val -1 \
+  --log-save 1 \
+  --train-lr-scheduler 2 \
+  --train-batchsize 3 \
+  --train-epoch 30 \
+  --train-lr 3e-4 \
+  --ema 0.999 \
+  --fp16
 ```
 
 ## Citation
