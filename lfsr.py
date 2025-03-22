@@ -1,4 +1,4 @@
-# Copyright 2022 The KaiJIN Authors. All Rights Reserved.
+# Copyright 2025 The KaiJIN Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,14 +17,12 @@
 import glob
 import os
 import random
-import importlib
 import tqdm
 import copy
 import argparse
 import functools
 import einops
 
-import cv2
 import numpy as np
 from skimage import metrics
 import h5py
@@ -40,7 +38,7 @@ import einops
 
 from torch.cuda.amp import autocast, GradScaler
 
-from LFTransMamba import LFTransMamba
+import models
 
 
 PROTOCALS_4X = {
@@ -442,103 +440,7 @@ class LF_divide_integrate_psw(object):
 #!< PSW++
 #!<---------------------------------------------------------------------------
 
-
 class LF_divide_integrate_pswpp(object):
-  def __init__(self, scale, patch_size, stride):
-    self.scale = scale
-    self.patch_size = patch_size
-    self.stride = stride
-    self.bdr = (patch_size - stride) // 2
-    self.pad = torch.nn.ReflectionPad2d(padding=(self.bdr, self.bdr + stride - 1, self.bdr, self.bdr + stride - 1))
-
-  def LFdivide(self, LF):
-    assert LF.size(0) == 1, 'The batch_size of LF for test requires to be one!'
-    LF = LF.squeeze(0)
-    [c, u0, v0, h0, w0] = LF.size()
-    stride = self.stride
-    patch_size = self.patch_size
-
-    self.sai_h = h0
-    self.sai_w = w0
-
-    sub_lf = []
-    numU = 0
-    for y in range(0, h0, stride):
-      numV = 0
-      for x in range(0, w0, stride):
-        if y + patch_size > h0 and x + patch_size <= w0:
-          sub_lf.append(LF[..., h0 - patch_size:, x: x + patch_size])
-        elif y + patch_size <= h0 and x + patch_size > w0:
-          sub_lf.append(LF[..., y: y + patch_size, w0 - patch_size:])
-        elif y + patch_size > h0 and x + patch_size > w0:
-          sub_lf.append(LF[..., h0 - patch_size:, w0 - patch_size:])
-        else:
-          sub_lf.append(LF[..., y: y + patch_size, x: x + patch_size])
-        numV += 1
-      numU += 1
-
-    LF_divided = torch.stack(sub_lf, dim=0)
-    return LF_divided
-
-  def LFintegrate(self, LF_divided):
-    # each SAI size
-    stride = self.stride * self.scale
-    patch_size = self.patch_size * self.scale
-    bdr = self.stride // 2
-
-    # rearrange to SAI views
-    _, c, u, v, h, w = LF_divided.size()
-    h1 = self.sai_h * self.scale
-    w1 = self.sai_w * self.scale
-
-    # allocate space
-    out = torch.zeros(c, u, v, h1, w1).to(LF_divided.device)
-    mask = torch.zeros(c, u, v, h1, w1).to(LF_divided.device)
-
-    # colllect outter for patch_size
-    idx = 0
-    for y in range(0, h1, stride):
-      for x in range(0, w1, stride):
-        if y + patch_size > h1 and x + patch_size <= w1:
-          out[..., h1 - patch_size:, x: x + patch_size] += LF_divided[idx]
-          mask[..., h1 - patch_size:, x: x + patch_size] += 1
-        elif y + patch_size <= h1 and x + patch_size > w1:
-          out[..., y: y + patch_size, w1 - patch_size:] += LF_divided[idx]
-          mask[..., y: y + patch_size, w1 - patch_size:] += 1
-        elif y + patch_size > h1 and x + patch_size > w1:
-          out[..., h1 - patch_size:, w1 - patch_size:] += LF_divided[idx]
-          mask[..., h1 - patch_size:, w1 - patch_size:] += 1
-        else:
-          out[..., y: y + patch_size, x: x + patch_size] += LF_divided[idx]
-          mask[..., y: y + patch_size, x: x + patch_size] += 1
-        idx += 1
-    # final = out / mask
-
-    # collect inner for patch_size
-    idx = 0
-    out_in = torch.zeros(c, u, v, h1, w1).to(LF_divided.device)
-    mask_in = torch.zeros(c, u, v, h1, w1).to(LF_divided.device)
-    for y in range(0, h1, stride):
-      for x in range(0, w1, stride):
-        if y + patch_size > h1 and x + patch_size <= w1:
-          pass
-        elif y + patch_size <= h1 and x + patch_size > w1:
-          pass
-        elif y + patch_size > h1 and x + patch_size > w1:
-          pass
-        else:
-          out_in[..., y + bdr: y + bdr + stride, x + bdr: x + bdr + stride] += LF_divided[idx][..., bdr: bdr + stride, bdr: bdr + stride]  # nopep8
-          mask_in[..., y + bdr: y + bdr + stride, x + bdr: x + bdr + stride] += 1
-        idx += 1
-
-    # inner to zero
-    mask[mask_in != 0] = 0
-    out[mask_in != 0] = 0
-    final = (out + out_in) / (mask + mask_in)
-
-    return final
-  
-class LF_divide_integrate_sad(object):
   def __init__(self, scale, patch_size, stride):
     self.scale = scale
     self.patch_size = patch_size
@@ -635,8 +537,6 @@ class LF_divide_integrate_sad(object):
         elif y + patch_size > h1 and x + patch_size > w1:
           pass
         else:
-          # out_in[..., y + bdr: y + bdr + stride, x + bdr: x + bdr + stride] += LF_divided[idx][..., bdr: bdr + stride, bdr: bdr + stride]  # nopep8
-          # mask_in[..., y + bdr: y + bdr + stride, x + bdr: x + bdr + stride] += 1
           out_in[..., y: y + patch_size, x: x + patch_size] += LF_divided[idx] * pm
           mask_in[..., y: y + patch_size, x: x + patch_size] += pm
           
@@ -648,27 +548,6 @@ class LF_divide_integrate_sad(object):
     final = (out + out_in) / (mask + mask_in)
 
     return final
-
-
-#!<-----------------------------------------------------------------------------
-#!< FULL
-#!<-----------------------------------------------------------------------------
-
-class LF_divide_integrate_full(object):
-
-  def __init__(self, scale, patch_size, stride):
-    self.scale = scale
-    self.patch_size = patch_size
-    self.stride = stride
-    self.bdr = (patch_size - stride) // 2
-    self.pad = torch.nn.ReflectionPad2d(padding=(self.bdr, self.bdr + stride - 1, self.bdr, self.bdr + stride - 1))
-
-  def LFdivide(self, LF):
-    return LF
-
-  def LFintegrate(self, LF_divided):
-    return LF_divided[0]
-
 
 #!<-----------------------------------------------------------------------------
 #!< TRAINING TRANSFORM
@@ -798,10 +677,6 @@ class LFSR():
     # load model and possible optimizer
     self.load(self.Model, self.Config.model_path, self.Config.model_source)
 
-    # extend to distributed
-    if self.Config.task == 'train':
-      self.Model = torch.nn.DataParallel(self.Model)
-
     # setting ema: note that loadding paramaters first
     self.ModelEMA = ModelEMA(self.Model, decay=self.Config.ema_decay)
     self.ModelEMA.load(self.Config.model_ema_path)
@@ -813,10 +688,6 @@ class LFSR():
       processor = LF_divide_integrate_psw
     elif self.Config.processor == 'psw++':
       processor = LF_divide_integrate_pswpp
-    elif self.Config.processor == 'sad':
-      processor = LF_divide_integrate_sad
-    elif self.Config.processor == 'full':
-      processor = LF_divide_integrate_full
     self.Processor = processor(self.Config.scale, self.Config.patch_size, self.Config.stride)
 
   #!<---------------------------------------------------------------------------
@@ -854,7 +725,10 @@ class LFSR():
       print(f'{model_path} is None, do not load any params.')
       return
     state_dict = torch.load(model_path, map_location='cpu')
-    model.load_state_dict(state_dict['state_dict'])
+    new_dict = {}
+    for k, v in state_dict['state_dict'].items():
+      new_dict[k.replace('module.', '')] = v
+    model.load_state_dict(new_dict, strict=False)
     print('Loading model source: {}'.format(model_source))
 
   def build_model(self):
@@ -864,7 +738,9 @@ class LFSR():
 
     if cfg.model.startswith('LFTransMamba'):
       D, R, K, C, T = [int(s[1:]) for s in cfg.model.split('_')[1:]]
-      model = LFTransMamba(angRes_in=angular, scale_factor=scale, D=D, R=R, K=K, C=C, T=T)
+      model = models.LFTransMamba(angRes_in=angular, scale_factor=scale, D=D, R=R, K=K, C=C, T=T)
+    elif cfg.model.startswith('LF_DET_0214'):
+      model = models.LF_DET_0214(angRes_in=angular, scale_factor=scale, patch_size=cfg.patch_size)
     else:
       raise NotImplementedError(cfg.model)
 
@@ -1110,8 +986,8 @@ class LFSR():
     ssim = np.zeros([angular, angular], dtype=np.float32)
 
     for y, x in zip(range(angular), range(angular)):
-      psnr[y, x] = metrics.peak_signal_noise_ratio(gt[y, x], sr[y, x], data_range=1.0)
-      ssim[y, x] = metrics.structural_similarity(gt[y, x], sr[y, x], gaussian_weights=True, data_range=2.0)
+      psnr[y, x] = metrics.peak_signal_noise_ratio(gt[y, x], sr[y, x])
+      ssim[y, x] = metrics.structural_similarity(gt[y, x], sr[y, x], gaussian_weights=True)
 
     psnr = psnr.sum() / np.sum(psnr > 0)
     ssim = ssim.sum() / np.sum(ssim > 0)
@@ -1150,7 +1026,6 @@ class LFSR():
 
       # inference
       hr_preds = self.inference(lr_images)
-      # cv2.imwrite(f'img_{step}.png', torch.cat([hr_preds, hr_images, (hr_preds - hr_images).abs()], dim=3)[0][0].mul(255).round().byte().cpu().numpy())
 
       # compute psnr/ssim per images
       metric = self.compute_psnr_ssim(hr_preds, hr_images)
@@ -1245,7 +1120,7 @@ if __name__ == "__main__":
   # ---------------------------------------------
   #  USED BY CONTEXT
   # ---------------------------------------------
-  parser.add_argument('--name', type=str, default='tw')
+  parser.add_argument('--name', type=str, default='LFSR')
   parser.add_argument('--root', type=str, default='_outputs', help="None for creating, otherwise specific root.")
   parser.add_argument('--device', type=str, default='cuda:0')
   parser.add_argument('--output_dir', type=str, default='_outputs', help="default output folder.")
@@ -1298,7 +1173,7 @@ if __name__ == "__main__":
   parser.add_argument('--scale', type=int, default=4, help="upsample scale.")
   parser.add_argument('--mode', type=str, default='batch', choices=['single', 'batch'])
   parser.add_argument('--angular', type=int, default=5, choices=[5, 9])
-  parser.add_argument('--processor', type=str, default='vanilla', choices=['vanilla', 'psw', 'psw++', 'full', 'sad'])
+  parser.add_argument('--processor', type=str, default='vanilla', choices=['vanilla', 'psw', 'psw++'])
 
   # only for test tta
   parser.add_argument('--tta', action='store_true', help="test time augmentation.")
@@ -1307,4 +1182,5 @@ if __name__ == "__main__":
 
   config, _ = parser.parse_known_args()
   config.root = f'{config.root}/{config.name}'
+  print(config)
   LFSR(config)()

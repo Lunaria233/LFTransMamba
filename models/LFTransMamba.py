@@ -2479,7 +2479,11 @@ if __name__ == '__main__':
   inputs = (torch.rand(1, 1, 32 * 5, 32 * 5).cuda(),)
   counter = FlopCountAnalysis(model, inputs)
   counter.set_op_handle(**supported_ops)
-  # print(counter.total())
   
   for name, flops in counter.by_module().items():
-    print(f"{name}: {flops}")
+    print(f"{flops/1000/1000/1000} GFLOPs")
+    break
+    
+  from fvcore.nn.parameter_count import parameter_count as fvcore_parameter_count
+  params = fvcore_parameter_count(model)[""]
+  print(params / 1024.0, 'KB')
