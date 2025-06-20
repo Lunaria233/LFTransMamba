@@ -34,6 +34,31 @@ Kai Jin, Zeqiang Wei, Angulia Yang, Mingzhi Gao, Xiuzhuang Zhou
 }
 ```
 
+## Citation
+
+If you find this work helpful, please consider citing the following papers:
+
+```bibtex
+@ARTICLE{Wei_L2FMamba_TCI25,
+  author={Wei, Zeqiang and Jin, Kai and Hou, Zeyi and Song, Kuan and Zhou, Xiuzhuang},
+  journal={IEEE Transactions on Computational Imaging}, 
+  title={$L^{2}$FMamba: Lightweight Light Field Image Super-Resolution With State Space Model}, 
+  year={2025},
+  volume={11},
+  number={},
+  pages={816-826},
+  doi={10.1109/TCI.2025.3577338}}
+
+@InProceedings{Jin_LFTransMamba_CVPR25,
+    author    = {Jin, Kai and Wei, Zeqiang and Yang, Angulia and Wu, Di and Gao, Mingzhi and Zhou, Xiuzhuang},
+    title     = {LFTransMamba: A Hybrid Mamba-Transformer Model for Light Field Image Super-Resolution},
+    booktitle = {Proceedings of the Computer Vision and Pattern Recognition Conference (CVPR) Workshops},
+    month     = {June},
+    year      = {2025},
+    pages     = {1195-1204}
+}
+```
+
 ## Instructions
 
 ### 1. Dependencies
@@ -139,19 +164,6 @@ python lfsr.py --name Track2.LFTransMamba_D16_R1_K6_C32_T0 --model LFTransMamba_
 
 # Track3 - Large Model
 python lfsr.py --name Track3.LFTransMamba_D16_R1_K24_C80_T2 --model LFTransMamba_D16_R1_K24_C80_T2 --device cuda:0 --task train --scale 4 --patch-size 32 --stride 8 --processor psw++ --angular 5 --dataset LFSR.ALL4.EXTRA --log 10 --log-val -1 --log-save 1 --train-lr-scheduler 2 --train-batchsize 3 --train-epoch 30 --train-lr 3e-4 --ema 0.999 --fp16
-```
-
-## Citation
-
-If you find this work helpful, please consider citing the following papers:
-
-```bibtex
-@InProceedings{BasicLFSR,
-  author    = {Wang, Yingqian and Wang, Longguang and Liang, Zhengyu and Yang, Jungang and Timofte, Radu and Guo, Yulan and Jin, Kai and Wei, Zeqiang and Yang, Angulia and Guo, Sha and Gao, Mingzhi and Zhou, Xiuzhuang and Duong, Vinh Van and Huu, Thuc Nguyen and Yim, Jonghoon and Jeon, Byeungwoo and Liu, Yutong and Cheng, Zhen and Xiao, Zeyu and Xu, Ruikang and Xiong, Zhiwei and Liu, Gaosheng and Jin, Manchang and Yue, Huanjing and Yang, Jingyu and Gao, Chen and Zhang, Shuo and Chang, Song and Lin, Youfang and Chao, Wentao and Wang, Xuechun and Wang, Guanghui and Duan, Fuqing and Xia, Wang and Wang, Yan and Xia, Peiqi and Wang, Shunzhou and Lu, Yao and Cong, Ruixuan and Sheng, Hao and Yang, Da and Chen, Rongshan and Wang, Sizhe and Cui, Zhenglong and Chen, Yilei and Lu, Yongjie and Cai, Dongjun and An, Ping and Salem, Ahmed and Ibrahem, Hatem and Yagoub, Bilel and Kang, Hyun-Soo and Zeng, Zekai and Wu, Heng},
-  title     = {NTIRE 2023 Challenge on Light Field Image Super-Resolution: Dataset, Methods and Results},
-  booktitle = {IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)},
-  year      = {2023},
-}
 ```
 
 ## Contact
