@@ -29,14 +29,14 @@ If you find this work helpful, please consider citing the following papers:
 
 ```bibtex
 @ARTICLE{Wei_L2FMamba_TCI25,
-  author={Wei, Zeqiang and Jin, Kai and Hou, Zeyi and Song, Kuan and Zhou, Xiuzhuang},
-  journal={IEEE Transactions on Computational Imaging}, 
-  title={$L^{2}$FMamba: Lightweight Light Field Image Super-Resolution With State Space Model}, 
-  year={2025},
-  volume={11},
-  number={},
-  pages={816-826},
-  doi={10.1109/TCI.2025.3577338}}
+    author   = {Wei, Zeqiang and Jin, Kai and Hou, Zeyi and Song, Kuan and Zhou, Xiuzhuang},
+    journal  = {IEEE Transactions on Computational Imaging}, 
+    title    = {$L^{2}$FMamba: Lightweight Light Field Image Super-Resolution With State Space Model}, 
+    year     = {2025},
+    volume   = {11},
+    pages    = {816-826},
+    doi      = {10.1109/TCI.2025.3577338}
+}
 
 @InProceedings{Jin_LFTransMamba_CVPR25,
     author    = {Jin, Kai and Wei, Zeqiang and Yang, Angulia and Wu, Di and Gao, Mingzhi and Zhou, Xiuzhuang},
