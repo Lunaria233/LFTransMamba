@@ -23,17 +23,6 @@ Kai Jin, Zeqiang Wei, Angulia Yang, Mingzhi Gao, Xiuzhuang Zhou
 
 ✅ **Mar, 2025:** This repository contains official pytorch implementation of "LFTransMamba: A Hybrid Transformer-Mamba Network for Light Field Image Super-Resolution" in **? solutions 👑** in [NTIRE2025 Light-Field Super Resolution: Track 3 Large Model](https://codalab.lisn.upsaclay.fr/competitions/21278#results)
 
-## Introduction
-
-```bibtex
-@InProceedings{DistgEPIT,
-    author    = {Jin, Kai and Wei, Zeqiang and Yang, Angulia and Gao, Mingzhi and Zhou, Xiuzhuang},
-    title     = {LFTransMamba: A Hybrid Transformer-Mamba Network for Light Field Image Super-Resolution},
-    booktitle = {IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)},
-    year      = {2025},
-}
-```
-
 ## Citation
 
 If you find this work helpful, please consider citing the following papers:
